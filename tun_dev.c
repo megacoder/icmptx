@@ -8,8 +8,8 @@
     VTun - Virtual Tunnel over TCP/IP network.
 
     Copyright (C) 1998-2000  Maxim Krasnyansky <max_mk@yahoo.com>
-    Copyright (C) 2006       Thomer M. Gil <thomer@thomer.com>
-    Copyright (C) 2008       John Plaxco <john@johnplaxco.com>
+    Copyright (C) 2006	     Thomer M. Gil <thomer@thomer.com>
+    Copyright (C) 2008	     John Plaxco <john@johnplaxco.com>
 
     VTun has been derived from VPPP package by Maxim Krasnyansky.
 
@@ -58,12 +58,12 @@ tun_open_old(
 	do	{
 		int	i;
 
-		for(i=0; i < 255; i++)	{
+		for( i=0; i < 255; ++i )	{
 			char	tunname[14];
 
 			sprintf( tunname, "/dev/tun%d", i );
 			/* Open device */
-			if( (fd=open(tunname, O_RDWR)) > 0 )	{
+			if( (fd = open(tunname, O_RDWR)) > 0 )	{
 				break;
 			}
 		}
@@ -79,32 +79,47 @@ tun_open_old(
 /*
  * find a tun device and open it, returning the file descriptor on success or -1 on failure with errno possibly set.
  */
-int tun_open() {
-  struct ifreq ifr;
-  int fd;
 
-  if ((fd = open("/dev/net/tun", O_RDWR)) < 0) {
-    return tun_open_old();
-  }
+int
+tun_open(
+	void
+)
+{
+	int		retval;
 
-  memset(&ifr, 0, sizeof(ifr));
-
-  ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
-
-  if (ioctl(fd, TUNSETIFF, (void *) &ifr) < 0) {
-    if (errno == EBADFD) {
-      /* Try old ioctl */
-      if (ioctl(fd, OTUNSETIFF, (void *) &ifr) < 0)
-        goto failed;
-    } else
-      goto failed;
-  }
-
-  return fd;
-
- failed:
-  close(fd);
-  return -1;
+	retval = -1;
+	do	{
+		int	fd;
+		fd = open( "/dev/net/tun", O_RDWR );
+		if( fd < 0 )	{
+			fd = tun_open_old();
+			if( fd < 0 )	{
+				/* Cannot open TUN device. Give up.	 */
+				break;
+			}
+		}
+		/* TUN device open in 'fd'				 */
+		do	{
+			struct ifreq	ifr;
+			memset( &ifr, 0, sizeof(ifr) );
+			ifr.ifr_flags = ( IFF_TUN | IFF_NO_PI );
+			/* Gonna use errno!=0 to signal we failed.		 */
+			errno = 0;
+			ioctl( fd, TUNSETIFF, &ifr );
+#if	0
+			if( errno == EBADFD )	{
+				ioctl( fd, OTUNSETIFF, &ifr );
+			}
+#endif	/* NOPE */
+			if( errno )	{
+				(void) close( fd );
+				break;
+			}
+			/* All went well, tell where device was opened	 */
+			retval = fd;
+		} while( 0 );
+	} while( 0 );
+	return( retval );
 }
 
 int tun_close(int fd) {
