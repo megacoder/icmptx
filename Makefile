@@ -1,15 +1,25 @@
-flags=-g3 -Wall -ansi -pedantic -D_GNU_SOURCE
+CFLAGS	=-g3 -Wall -ansi -pedantic -D_GNU_SOURCE -pedantic -Wall -Werror
+LDFLAGS	=
+BASKET=$(shell [ -f .gitignore ] && cat .gitignore)
 
-all: icmptx
+CFILES	=$(wildcard *.c)
+HFILES	=$(wildcard *.h)
 
-icmptx: it.o icmptx.c tun_dev.o
-	gcc $(flags) -o icmptx icmptx.c it.o tun_dev.o
+OBS	=${CFILES:*.c=*.o}
 
-it.o: it.c tun_dev.h
-	gcc $(flags) -c it.c
+all::	icmptx
+all::	tags
 
-tun_dev.o: tun_dev.c
-	gcc $(flags) -c tun_dev.c
+tags::	${HFILES} ${CFILES}
+	ctags ${HFILES} ${CFILES}
 
-clean:
-	rm -f tun_dev.o it.o icmptx
+vars::
+	@echo 'BASKET=${BASKET}'
+
+icmptx:	${OBS}
+
+clean::
+	${RM} *.o tags
+
+distclean clobber:: clean
+	${RM} icmptx
