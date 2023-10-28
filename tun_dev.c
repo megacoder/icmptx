@@ -1,4 +1,4 @@
-/*  
+/*
     This file is part of ICMPTX
 
     VTun - Virtual Tunnel over TCP/IP network.
@@ -7,7 +7,7 @@
     Copyright (C) 2006       Thomer M. Gil <thomer@thomer.com>
     Copyright (C) 2008       John Plaxco <john@johnplaxco.com>
 
-    VTun has been derived from VPPP package by Maxim Krasnyansky. 
+    VTun has been derived from VPPP package by Maxim Krasnyansky.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,11 +38,9 @@
 #include <sys/socket.h>
 #include <linux/if.h>
 
-int snprintf(char *str, size_t size, const char *format, ...);
-
-/* 
- * Allocate TUN device, returns opened fd. 
- */  
+/*
+ * Allocate TUN device, returns opened fd.
+ */
 int tun_open_old() {
   char tunname[14];
   int i, fd;
@@ -60,7 +58,7 @@ int tun_open_old() {
 #include <linux/if_tun.h>
 
 /* pre 2.4.6 compatibility */
-#define OTUNSETIFF     (('T'<< 8) | 202) 
+#define OTUNSETIFF     (('T'<< 8) | 202)
 
 /*
  * find a tun device and open it, returning the file descriptor on success or -1 on failure with errno possibly set.
@@ -80,11 +78,11 @@ int tun_open() {
   if (ioctl(fd, TUNSETIFF, (void *) &ifr) < 0) {
     if (errno == EBADFD) {
       /* Try old ioctl */
-      if (ioctl(fd, OTUNSETIFF, (void *) &ifr) < 0) 
+      if (ioctl(fd, OTUNSETIFF, (void *) &ifr) < 0)
         goto failed;
     } else
       goto failed;
-  } 
+  }
 
   return fd;
 
