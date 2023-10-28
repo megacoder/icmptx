@@ -1,4 +1,8 @@
 /*
+ * vim: ai sm noet nu nornu sw=8 ts=8
+ */
+
+/*
     This file is part of ICMPTX
 
     VTun - Virtual Tunnel over TCP/IP network.
@@ -24,7 +28,6 @@
 
 */
 
-/* #include "config.h" */
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -38,21 +41,34 @@
 #include <sys/socket.h>
 #include <linux/if.h>
 
+#include "tun_dev.h"
+
 /*
  * Allocate TUN device, returns opened fd.
  */
-int tun_open_old() {
-  char tunname[14];
-  int i, fd;
 
-  for(i=0; i < 255; i++){
-    sprintf(tunname, "/dev/tun%d", i);
-    /* Open device */
-    if( (fd=open(tunname, O_RDWR)) > 0 ){
-      return fd;
-    }
-  }
-  return -1;
+int
+tun_open_old(
+	void
+)
+{
+	int	fd;
+
+	fd = -1;
+	do	{
+		int	i;
+
+		for(i=0; i < 255; i++)	{
+			char	tunname[14];
+
+			sprintf( tunname, "/dev/tun%d", i );
+			/* Open device */
+			if( (fd=open(tunname, O_RDWR)) > 0 )	{
+				break;
+			}
+		}
+	} while( 0 );
+	return( fd );
 }
 
 #include <linux/if_tun.h>

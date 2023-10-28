@@ -1,4 +1,4 @@
-/*  
+/*
     This file is part of ICMPTX
 
     VTun - Virtual Tunnel over TCP/IP network.
@@ -7,7 +7,7 @@
     Copyright (C) 2006       Thomer M. Gil <thomer@thomer.com>
     Copyright (C) 2008       John Plaxco <john@johnplaxco.com>
 
-    VTun has been derived from VPPP package by Maxim Krasnyansky. 
+    VTun has been derived from VPPP package by Maxim Krasnyansky.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,17 +23,17 @@
     along with this ICMPTX.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DRIVER_H
-#define _DRIVER_H
+#ifndef _TUN_DEV_H
+#define _TUN_DEV_H
 
-/* Definitions for device and protocol drivers 
- * Interface will be completely rewritten in 
+/* Definitions for device and protocol drivers
+ * Interface will be completely rewritten in
  * version 3.0
  */
 
-int tun_open();
-int tun_close(int fd);
-int tun_write(int fd, char *buf, int len);
-int tun_read(int fd, char *buf, int len);
+int tun_open( void );
+int tun_close( int fd );
+int tun_write( int fd, char *buf, int len );
+int tun_read( int fd, char *buf, int len );
 
-#endif
+#endif  /* _TUN_DEV_H */
