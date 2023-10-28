@@ -19,7 +19,7 @@ vars::
 icmptx:	${OBS}
 
 clean::
-	${RM} *.o tags
+	${RM} ${BASKET}
 
 distclean clobber:: clean
 	${RM} icmptx
