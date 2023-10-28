@@ -122,14 +122,30 @@ tun_open(
 	return( retval );
 }
 
-int tun_close(int fd) {
-  return close(fd);
+int
+tun_close(
+	int	fd
+)
+{
+	return close( fd );
 }
 
-int tun_write(int fd, char *buf, int len) {
-  return write(fd, buf, len);
+int
+tun_write(
+	int	fd,
+	char *	buf,
+	int	len
+)
+{
+	return write( fd, buf, len );
 }
 
-int tun_read(int fd, char *buf, int len) {
-  return read(fd, buf, len);
+int
+tun_read(
+	int	fd,
+	char *	buf,
+	int	len
+)
+{
+	return read( fd, buf, len );
 }
