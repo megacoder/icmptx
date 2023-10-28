@@ -1,4 +1,4 @@
-CFLAGS	=-g3 -Wall -ansi -pedantic -D_GNU_SOURCE -pedantic -Wall -Werror
+CFLAGS	=-g3 -ansi -pedantic -D_GNU_SOURCE -pedantic -Wall -Werror
 LDFLAGS	=
 BASKET=$(shell [ -f .gitignore ] && cat .gitignore)
 
